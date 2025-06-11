@@ -39,6 +39,7 @@ PLATFORM           ?= PLATFORM_DESKTOP
 # Locations of your newly installed library and associated headers. See ../src/Makefile
 # On Linux, if you have installed raylib but cannot compile the examples, check that
 # the *_INSTALL_PATH values here are the same as those in src/Makefile or point to known locations.
+
 # To enable system-wide compile-time and runtime linking to libraylib.so, run ../src/$ sudo make install RAYLIB_LIBTYPE_SHARED.
 # To enable compile-time linking to a special version of libraylib.so, change these variables here.
 # To enable runtime linking to a special version of libraylib.so, see EXAMPLE_RUNTIME_PATH below.
@@ -368,6 +369,8 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 SRC_DIR = src
 OBJ_DIR = obj
 
+CXXFLAGS += -MMD -MP
+
 # Define all object files from source files
 SRC = $(call rwildcard, $(SRC_DIR)/, *.cpp)
 
@@ -394,7 +397,7 @@ all:
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJ)
-	$(CXX) -o $(PROJECT_NAME)$(EXT) $(OBJ) $(CXXFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+	$(CXX) -o $(PROJECT_NAME)$(EXT) $(OBJ) $(CXXFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM) && ./$(PROJECT_NAME)
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
@@ -427,3 +430,4 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 endif
 	@echo Cleaning done
 
+-include $(OBJ:.o=.d)

@@ -2,65 +2,83 @@
 #include "terrain.h"
 #include "forest.h"
 #include "config.h"
+#include "water.h"
+#include <iostream>
+
 int main(void) {
 
   /* Parametros de ventana */
   InitWindow(1200, 800, "Terreno Procedural");
   SetTargetFPS(60);
 
-  /* Se crea la variable para almacenar el heightmap del terreno */
-  Image heightmap;
-  Model terrain = GenerateTerrain(&heightmap);
-
-  //* Se definen los shaders del terreno */
-  Shader shader = LoadShader("lighting.vs", "lighting.fs");
-  terrain.materials[0].shader = shader;
-
-  /* Vector direccion de la luz para ser usado con el shaders */
-  Vector3 lightDir = Vector3Normalize((Vector3){ -1.0f, -1.0f, -1.0f });
-  SetShaderValue(shader, GetShaderLocation(shader, "lightDirection"), &lightDir, SHADER_UNIFORM_VEC3);
-
-  Vector4 col = (Vector4){ 1.0f, 0.8f, 0.6f, 1.0f };
-  SetShaderValue(shader, GetShaderLocation(shader, "colDiffuse"), &col, SHADER_UNIFORM_VEC4);
-
   /* Parametros de camara */
   Camera3D camera = { 0 };
   float worldSize = TERRAIN_SIZE * TERRAIN_SCALE ;
-  Vector3 center = { worldSize / 2, 0, worldSize / 2 };
-  camera.position = Vector3Add(center, (Vector3){ 80, 130, 150 });
-  camera.target = center;
+  Vector3 center = { - worldSize / 2, 0, - worldSize / 2};
+  camera.position = Vector3Add(center, (Vector3){ 300, 200, 400 });
+  camera.target = (Vector3){0, 0, 0} ;
   camera.up = (Vector3){ 0, 1, 0 };
-  camera.fovy = 45;
+  camera.fovy = 90;
   camera.projection = CAMERA_PERSPECTIVE;
+  
+  Image heightmap =   GenerateBlendedHeightmap();
+
   //Generacion de arboles 
   Vector3 treePositions[TREE_COUNT];
   GenerateForest(treePositions, heightmap);
+  
+  Model terrain_model = GenerateTerrain(heightmap);
+  SetupWaterShaderPassiveParameters(&terrain_model.materials[0].shader);
+  
+  Model water_model = GenWaterModel();
+  SetupWaterShaderPassiveParameters(&water_model.materials[0].shader);
+  
   //Liberacion
   UnloadImage(heightmap);
 
+  float time = 0.0f;
+  
   /* Logica principal del programa */
   while (!WindowShouldClose()) {
-    UpdateCamera(&camera, CAMERA_ORBITAL);
+    UpdateCamera(&camera, CAMERA_FREE);
 
+    time += GetFrameTime();
+    SetupWaterShaderTime(&water_model.materials[0].shader, time);
+
+    // Simulate the sun moving in a circular arc
+    float angle = time * 0.2f;  // Speed of rotation (adjust as needed)
+    Vector3 lightDir = {
+      cosf(angle),  // X
+      -sinf(angle), // Y (negative Y so the light rises and falls)
+      -0.5f         // Z (fixed, or vary for more realism)
+    };
+    
+    SetupWaterShaderLight(&water_model.materials[0].shader, lightDir);
+    SetupTerrainShaderLight(&terrain_model.materials[0].shader,lightDir);
+  
     BeginDrawing();
     ClearBackground(SKYBLUE);
+    
     BeginMode3D(camera);
 
-    Matrix modelMat = MatrixIdentity();
-    SetShaderValueMatrix(shader, GetShaderLocation(shader, "matModel"), modelMat);
+    SetupTerrainShaderActiveParameters(&terrain_model.materials[0].shader);
+    // DrawGrid(TERRAIN_SIZE, 5);
 
-    DrawModel(terrain, (Vector3){ 0, 0, 0 }, TERRAIN_SCALE, DARKGREEN);
-    DrawModel(terrain, (Vector3){ 0, 0, TERRAIN_SIZE }, TERRAIN_SCALE, DARKGREEN);
+    DrawModel(terrain_model, (Vector3){ - worldSize / 2, 0, - worldSize / 2}, TERRAIN_SCALE, WHITE);
+    DrawModel(water_model, (Vector3){ - worldSize / 2, 39.8f , - worldSize / 2}, TERRAIN_SCALE, WHITE);
+    
+    DrawCube( (Vector3){0, 100, 0}, 1.5f, 1.5f, 1.5f, BLUE);
 
     //AQUI DIBUJE LOS ARBOLES
     DrawForest(treePositions);
-    DrawGrid(50, 5);
+    
     EndMode3D();
     EndDrawing();
 }
 
   /* Liberación de memoria */
-  UnloadModel(terrain);
+  UnloadWaterResources(&water_model);
+  UnloadTerrainResources(&terrain_model);
   CloseWindow();
   return 0;
 }
