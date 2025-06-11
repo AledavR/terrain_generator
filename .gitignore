@@ -3,3 +3,4 @@
 main
 terrain
 *.o
+*.d
