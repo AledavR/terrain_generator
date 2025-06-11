@@ -1,5 +1,7 @@
+#include "raylib.h"
 #include "terrain.h"
-
+#include "forest.h"
+#include "config.h"
 int main(void) {
 
   /* Parametros de ventana */
@@ -10,7 +12,7 @@ int main(void) {
   Image heightmap;
   Model terrain = GenerateTerrain(&heightmap);
 
-  /* Se definen los shaders del terreno */
+  //* Se definen los shaders del terreno */
   Shader shader = LoadShader("lighting.vs", "lighting.fs");
   terrain.materials[0].shader = shader;
 
@@ -30,8 +32,10 @@ int main(void) {
   camera.up = (Vector3){ 0, 1, 0 };
   camera.fovy = 45;
   camera.projection = CAMERA_PERSPECTIVE;
-
-  /* Liberacion de espacio en memoria (El terreno ya fue generado para este punto) */
+  //Generacion de arboles 
+  Vector3 treePositions[TREE_COUNT];
+  GenerateForest(treePositions, heightmap);
+  //Liberacion
   UnloadImage(heightmap);
 
   /* Logica principal del programa */
@@ -48,15 +52,15 @@ int main(void) {
     DrawModel(terrain, (Vector3){ 0, 0, 0 }, TERRAIN_SCALE, DARKGREEN);
     DrawModel(terrain, (Vector3){ 0, 0, TERRAIN_SIZE }, TERRAIN_SCALE, DARKGREEN);
 
+    //AQUI DIBUJE LOS ARBOLES
+    DrawForest(treePositions);
     DrawGrid(50, 5);
     EndMode3D();
-
     EndDrawing();
-  }
+}
 
   /* Liberación de memoria */
   UnloadModel(terrain);
-  UnloadShader(shader);
   CloseWindow();
   return 0;
 }

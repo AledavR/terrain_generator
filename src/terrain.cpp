@@ -36,6 +36,7 @@ Image GenerateBlendedHeightmap(void) {
 
     /* Limpieza de memoria */
     UnloadImageColors(basePixels);
+    UnloadImageColors(heightPixels);
     UnloadImage(base);
     UnloadImage(height_layer);
 
