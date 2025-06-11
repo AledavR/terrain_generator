@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 
-// Genera posiciones válidas para árboles
-void GenerateForest(Vector3 *positions, Image heightmap) {
+// Genera posiciones válidas para árboles flotantes (para depuración visual)
+int GenerateForest(Vector3 *positions, Image heightmap) {
     int treesPlaced = 0;
     int maxAttempts = TREE_COUNT * 20;
     int attempts = 0;
+
+    Vector3 offset = { -WORLD_SIZE / 2, 0, -WORLD_SIZE / 2 };
 
     while (treesPlaced < TREE_COUNT && attempts < maxAttempts) {
         int x = rand() % TERRAIN_SIZE;
@@ -14,42 +16,52 @@ void GenerateForest(Vector3 *positions, Image heightmap) {
 
         float height = GetHeightAtPoint(heightmap, x, z, MAX_TERRAIN_HEIGHT);
 
-        // Solo colocamos árboles en zonas adecuadas de altura
-        if (height >= 1.0f && height <= 38.0f) {
+        if (height >= 1.0f && height <= 90.0f) {
             Color pixel = GetImageColor(heightmap, x, z);
-            if (pixel.r < 250) {
-                positions[treesPlaced++] = (Vector3){
-                    x * TERRAIN_SCALE,
-                    height,
-                    z * TERRAIN_SCALE
-                };
-            }
+            // Condiciones para evitar agua y nieve
+        if (pixel.r > 30 && pixel.r < 200) {
+            positions[treesPlaced++] = (Vector3){
+            x * TERRAIN_SCALE + offset.x,
+            height + 40.0f,
+            z * TERRAIN_SCALE + offset.z
+    };
+}
+
         }
+
         attempts++;
     }
 
     if (treesPlaced < TREE_COUNT) {
-        TraceLog(LOG_WARNING, "Solo se colocaron %d árboles de %d", treesPlaced, TREE_COUNT);
+        TraceLog(LOG_WARNING, "Solo se colocaron %d árboles de %d posibles", treesPlaced, TREE_COUNT);
     }
+
+    return treesPlaced;
 }
 
-// Dibuja árboles tipo voxel (tronco + copa)
-void DrawForest(Vector3 *positions) {
-    for (int i = 0; i < TREE_COUNT; i++) {
+// Dibuja árboles como cilindro rojo + esfera amarilla
+void DrawForest(Vector3 *positions, int count) {
+    for (int i = 0; i < count; i++) {
         Vector3 pos = positions[i];
 
-        // Tronco: cubo delgado
-        DrawCube(
-            (Vector3){ pos.x, pos.y + 1.0f, pos.z },  // centro del tronco
-            0.5f, 2.0f, 0.5f,                         // tamaño del cubo
-            BROWN
-        );
+        float trunkHeight = 10.0f;
+        float trunkRadius = 1.0f;
+        float crownHeight = 6.0f;
+        float crownRadius = 4.0f;
 
-        // Copa: cubo grande encima del tronco
-        DrawCube(
-            (Vector3){ pos.x, pos.y + 3.0f, pos.z },  // centro de la copa
-            2.0f, 2.0f, 2.0f,
-            GREEN
-        );
+        Vector3 trunkPos = {
+            pos.x,
+            pos.y + trunkHeight / 2.0f,
+            pos.z
+        };
+
+        Vector3 crownPos = {
+            pos.x,
+            pos.y + trunkHeight + crownHeight / 2.0f,
+            pos.z
+        };
+
+        DrawCylinder(trunkPos, trunkRadius, trunkRadius, trunkHeight, 16, RED);
+        DrawSphere(crownPos, crownRadius, YELLOW);
     }
 }

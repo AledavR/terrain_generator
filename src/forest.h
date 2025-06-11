@@ -6,9 +6,9 @@
 #include "terrain.h"
 
 // Genera posiciones de árboles válidas
-void GenerateForest(Vector3 *positions, Image heightmap);
+int GenerateForest(Vector3 *positions, Image heightmap);
 
 // Dibuja árboles en pantalla
-void DrawForest(Vector3 *positions);
+void DrawForest(Vector3 *positions,int count);
 
 #endif // FOREST_H
