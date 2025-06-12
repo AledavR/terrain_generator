@@ -7,7 +7,7 @@
 #include "config.h"
 
 Image GenerateBlendedHeightmap(void);
-float GetHeightAtPoint(Image heightmap, int x, int z, float maxHeight);
+float GetHeightAtPoint(Image heightmap, int x, int z);
 Texture GenerateTerrainTexture(Image heightmap);
 Model GenerateTerrain(Image heightmap);
 void SetupTerrainShaderPassiveParameters(Shader* terrain_shader);
