@@ -5,7 +5,7 @@
 #define TERRAIN_SCALE 4.0f
 #define MAX_TERRAIN_HEIGHT 100
 
-#define RANDOM_TERRAIN true
+#define RANDOM_TERRAIN false
 
 #define TREE_COUNT 200
 

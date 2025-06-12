@@ -34,6 +34,8 @@ int main(void) {
     Model water_model = GenWaterModel();
     SetupWaterShaderPassiveParameters(&water_model.materials[0].shader);
 
+    Model tree_model = SetupTreeModel();
+
     // Ya no se necesita el heightmap como imagen
     UnloadImage(heightmap);
 
@@ -45,6 +47,7 @@ int main(void) {
 
         // Actualizar shaders
         SetupWaterShaderTime(&water_model.materials[0].shader, time);
+        SetupTreeShaderTime(&tree_model.materials[1].shader, time);
 
         float angle = time * 0.2f;
         Vector3 lightDir = {
@@ -55,19 +58,21 @@ int main(void) {
 
         SetupWaterShaderLight(&water_model.materials[0].shader, lightDir);
         SetupTerrainShaderLight(&terrain_model.materials[0].shader, lightDir);
-
+        SetupTreeShaderLight(&tree_model.materials[1].shader, lightDir);
+        
         // Render
         BeginDrawing();
         ClearBackground(SKYBLUE);
         BeginMode3D(camera);
 
         SetupTerrainShaderActiveParameters(&terrain_model.materials[0].shader);
+        // SetupTreeShaderActiveParameters(&tree_model.materials[1].shader);
 
         DrawModel(terrain_model, (Vector3){ -worldSize / 2, 0, -worldSize / 2 }, TERRAIN_SCALE, WHITE);
         DrawModel(water_model, (Vector3){ -worldSize / 2, 39.8f, -worldSize / 2 }, TERRAIN_SCALE, WHITE);
 
         // Dibujar árboles
-        DrawForest(treePositions, actualTreeCount);
+        DrawForest(treePositions, actualTreeCount, tree_model);
 
         EndMode3D();
         EndDrawing();
@@ -76,6 +81,7 @@ int main(void) {
     // Liberar recursos
     UnloadWaterResources(&water_model);
     UnloadTerrainResources(&terrain_model);
+    UnloadTreeResources(&terrain_model);
     CloseWindow();
 
     return 0;

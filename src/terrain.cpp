@@ -3,14 +3,12 @@
 Image GenerateBlendedHeightmap(void) {
 
   int offsetX = 0, offsetY = 0;
-    
-
+   
   if (RANDOM_TERRAIN){
     offsetX = GetRandomValue(0, 10000);
     offsetY = GetRandomValue(0, 10000);
   }
-                                           
-  
+     
   /* Genera el terreno base */
   Image base = GenImagePerlinNoise(TERRAIN_SIZE, TERRAIN_SIZE, offsetX, offsetY, 3.0f);
   Color *basePixels = LoadImageColors(base);
