@@ -37,7 +37,7 @@ Model SetupTreeModel(void)
   Shader tree_shader = LoadShader("resources/shaders/tree.vs", "resources/shaders/tree.fs");
   tree_model.materials[1].shader = tree_shader;
   
-  float freqX = 1.0f, speedX = 0.6f
+  float freqX = 1.0f, speedX = 0.6f;
   SetShaderValue(tree_shader, GetShaderLocation(tree_shader, "freqX"), &freqX, SHADER_UNIFORM_FLOAT);
   SetShaderValue(tree_shader, GetShaderLocation(tree_shader, "speedX"), &speedX, SHADER_UNIFORM_FLOAT);
 
