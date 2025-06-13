@@ -3,10 +3,10 @@
 
 Player::Player(const Vector3& startPos)
   : position(startPos),
-    size({2.5f, 5.0f, 2.5f}),
+    size({1.5f, 4.5f, 1.5f}),
     velocity({0.0f, 0.0f, 0.0f}),       
     moveSpeed(1.0f),
-    cameraRadius(20.0f),
+    cameraRadius(30.0f),
     gravity(0.05f),
     isOnGround(false),
     stepHeight(100.0f)

@@ -9,6 +9,7 @@
 int main(void) {
     InitWindow(1200, 800, "Terreno Procedural");
     SetTargetFPS(60);
+    DisableCursor();
     
     Player player((Vector3){ 0.0f, WORLD_SIZE / 4, 0.0f });
     
@@ -48,27 +49,6 @@ int main(void) {
 
     while (!WindowShouldClose()) {
 
-      
-      HideCursor();
-      // Define once at top or config
-      float mouseBoundaryRadius = 100.0f;  // Radius in pixels
-
-      // Get screen center and mouse position
-      Vector2 center = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-      Vector2 mouse = GetMousePosition();
-
-      // Compute offset vector from center
-      Vector2 offset = Vector2Subtract(mouse, center);
-      float dist = Vector2Length(offset);
-
-      if (dist > mouseBoundaryRadius) {
-        // Normalize direction and reflect to opposite side
-        Vector2 direction = Vector2Normalize(offset);
-        Vector2 reflected = Vector2Scale(direction, -mouseBoundaryRadius);
-        Vector2 newMousePos = Vector2Add(center, reflected);
-        SetMousePosition(newMousePos.x, newMousePos.y);
-      }
-      
         time += GetFrameTime();
 
         player.Update(camera, collision_model);
