@@ -11,6 +11,7 @@ public:
   Vector3 size;
   Vector3 velocity;
   float moveSpeed;
+  float cameraRadius;
   float gravity;
   bool isOnGround;
   float stepHeight;

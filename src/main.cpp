@@ -10,7 +10,7 @@ int main(void) {
     InitWindow(1200, 800, "Terreno Procedural");
     SetTargetFPS(60);
     
-    Player player((Vector3){ 0.0f, WORLD_SIZE / 10, 0.0f });
+    Player player((Vector3){ 0.0f, WORLD_SIZE / 4, 0.0f });
     
     Camera camera = { 0 };
     camera.position = Vector3Add(player.position, (Vector3){ 0.0f, 3.0f, -6.0f });  // Above and behind
@@ -23,12 +23,6 @@ int main(void) {
     // Camera3D camera = { 0 };
     float worldSize = TERRAIN_SIZE * TERRAIN_SCALE;
     Vector3 center = { -worldSize / 2, 0, -worldSize / 2 };
-
-    // camera.position = Vector3Add(center, (Vector3){ 300, 200, 400 });
-    // camera.target = (Vector3){ 0, 0, 0 };
-    // camera.up = (Vector3){ 0, 1, 0 };
-    // camera.fovy = 90.0f;
-    // camera.projection = CAMERA_PERSPECTIVE;
 
     // Generar heightmap y árboles
     Image heightmap = GenerateBlendedHeightmap();
@@ -74,9 +68,7 @@ int main(void) {
         Vector2 newMousePos = Vector2Add(center, reflected);
         SetMousePosition(newMousePos.x, newMousePos.y);
       }
-
       
-        UpdateCamera(&camera, CAMERA_THIRD_PERSON);
         time += GetFrameTime();
 
         player.Update(camera, collision_model);
@@ -105,9 +97,7 @@ int main(void) {
         SetupTerrainShaderActiveParameters(&terrain_model.materials[0].shader);
         // SetupTreeShaderActiveParameters(&tree_model.materials[1].shader);
 
-        // DrawModel(terrain_model, (Vector3){ -worldSize / 2, 0, -worldSize / 2 }, TERRAIN_SCALE, WHITE);
         DrawModel(terrain_model, (Vector3){ 0,0,0 }, 1.0f, WHITE);
-        // DrawModel(water_model, (Vector3){ -worldSize / 2, 0.0f, -worldSize / 2 }, TERRAIN_SCALE, WHITE);
         DrawModel(water_model, (Vector3){ 0 , WORLD_SIZE / 40, 0}, TERRAIN_SCALE, WHITE);
         
         player.Draw();
