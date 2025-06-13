@@ -48,6 +48,7 @@ void Player::Update(Camera& camera, const Model& model)
   if (IsKeyDown(KEY_S)) moveDir = Vector3Add(moveDir, forward);
   if (IsKeyDown(KEY_D)) moveDir = Vector3Subtract(moveDir, right);
   if (IsKeyDown(KEY_A)) moveDir = Vector3Add(moveDir, right);
+  if (IsKeyDown(KEY_SPACE)) velocity.y = 2.0f;
 
   if (Vector3Length(moveDir) > 0.0f) moveDir = Vector3Normalize(moveDir);
 
