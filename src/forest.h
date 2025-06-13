@@ -12,10 +12,10 @@ Model SetupTreeModel(void);
 void SetupTreeShaderPassiveParameters(Shader* tree_shader);
 void SetupTreeShaderLight(Shader* tree_shader, Vector3 light_dir);
 void SetupTreeShaderActiveParameters(Shader* tree_shader);
-void UnloadTreeResources(Model *tree_model);
 void SetupTreeShaderTime(Shader* tree_shader, float time);
+void UnloadTreeResources(Model *tree_model);
 
 // Dibuja árboles en pantalla
-void DrawForest(Vector3 *positions,int count, Model tree_model);
+void DrawForest(Vector3 *positions, int count, Model tree_model);
 
 #endif // FOREST_H
