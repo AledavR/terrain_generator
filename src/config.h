@@ -2,12 +2,12 @@
 #define CONFIG_H
 
 #define TERRAIN_SIZE 400
-#define TERRAIN_SCALE 4.0f
+#define TERRAIN_SCALE 10.0f
 #define MAX_TERRAIN_HEIGHT 100
 
-#define RANDOM_TERRAIN false
+#define RANDOM_TERRAIN true
 
-#define TREE_COUNT 200
+#define TREE_COUNT 600
 
 #define WORLD_SIZE TERRAIN_SIZE * TERRAIN_SCALE
 

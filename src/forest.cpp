@@ -16,18 +16,14 @@ int GenerateForest(Vector3 *positions, Image heightmap) {
 
         float height = GetHeightAtPoint(heightmap, x, z);
 
-        // Solo colocar árboles entre cierta altitud
-        if (height >= 0.11f && height <= 0.3f) {
-            positions[treesPlaced++] = (Vector3){
-                x * TERRAIN_SCALE + offset.x,
-                height * MAX_TERRAIN_HEIGHT * TERRAIN_SCALE + 1.0f,
-                z * TERRAIN_SCALE + offset.z
-            };
-        }
-
-        attempts++;
+    // Rango de crecimiento de arboles. (Por encima de las orillas por debajo de las montañas)
+    if (height >= 0.11f && height <= 0.3f) {
+        positions[treesPlaced++] = (Vector3){ x * TERRAIN_SCALE + offset.x,
+                                              height * MAX_TERRAIN_HEIGHT * TERRAIN_SCALE,
+                                              z * TERRAIN_SCALE + offset.z };
     }
-
+    attempts++;
+    }
     return treesPlaced;
 }
 
