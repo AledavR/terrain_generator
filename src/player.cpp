@@ -15,13 +15,14 @@ Player::Player(const Vector3& startPos)
 void Player::Update(Camera& camera, const Model& model)
 {
   static float yaw = 0.0f;
-  static float pitch = 9.0f;  // empieza con un poco de inclinación
+  static float pitch = 9.0f;
 
   Vector2 mouse = GetMouseDelta();
-  float sensitivity = 0.003f;
+  float sensitivityX = 0.003f;
+  float sensitivityY = 0.003f;
 
-  yaw -= mouse.x * sensitivity;
-  pitch -= mouse.y * sensitivity;
+  yaw += mouse.x * sensitivityX;
+  pitch -= mouse.y * sensitivityY;
 
   // Limitar el pitch para no voltear la cámara
   if (pitch > 1.5f) pitch = 1.5f;
@@ -32,9 +33,10 @@ void Player::Update(Camera& camera, const Model& model)
   if (wheelMove > 0)  cameraRadius -= 1.0f;
   else if (wheelMove < 0) cameraRadius += 1.0f; 
 
+  // Calculate camera position based on spherical coordinates
   float camX = sinf(yaw) * cosf(pitch) * cameraRadius;
   float camY = sinf(pitch) * cameraRadius;
-  float camZ = cosf(yaw) * cosf(pitch) * cameraRadius;
+  float camZ = cosf(yaw) * -cosf(pitch) * cameraRadius;
 
   Vector3 forward = Vector3Normalize((Vector3){ camX, 0.0f, camZ });
   Vector3 right = Vector3Normalize(Vector3CrossProduct(forward, camera.up));
@@ -125,7 +127,6 @@ void Player::Update(Camera& camera, const Model& model)
     position.z + camZ
   };
   camera.target = position;
-  
 }
 
 void Player::Draw()
