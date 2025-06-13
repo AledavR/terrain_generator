@@ -10,6 +10,7 @@ Image GenerateBlendedHeightmap(void);
 float GetHeightAtPoint(Image heightmap, int x, int z);
 Texture GenerateTerrainTexture(Image heightmap);
 Model GenerateTerrain(Image heightmap);
+Model GenerateCollisionModel(Image heightmap, Matrix transform);
 void SetupTerrainShaderPassiveParameters(Shader* terrain_shader);
 void SetupTerrainShaderLight(Shader* terrain_shader, Vector3 light_dir);
 void SetupTerrainShaderActiveParameters(Shader* terrain_shader);

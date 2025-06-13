@@ -20,7 +20,7 @@ int GenerateForest(Vector3 *positions, Image heightmap) {
     if (height >= 0.11f && height <= 0.3f) {
         positions[treesPlaced++] = (Vector3){
           x * TERRAIN_SCALE + offset.x,
-          height * MAX_TERRAIN_HEIGHT * TERRAIN_SCALE + 1.0f,
+          height * MAX_TERRAIN_HEIGHT * TERRAIN_SCALE,
           z * TERRAIN_SCALE + offset.z
         };
     }

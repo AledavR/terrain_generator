@@ -125,7 +125,13 @@ Model GenerateTerrain(Image heightmap) {
   Shader shader = LoadShader("resources/shaders/lighting.vs", "resources/shaders/lighting.fs");
   Mesh mesh = GenMeshHeightmap(heightmap, (Vector3){ TERRAIN_SIZE, MAX_TERRAIN_HEIGHT, TERRAIN_SIZE });
   Model terrain_model = LoadModelFromMesh(mesh);
-
+  Matrix transform =
+    MatrixMultiply(
+                   MatrixTranslate(-WORLD_SIZE / (TERRAIN_SCALE *2), 0, - WORLD_SIZE / (TERRAIN_SCALE *2))
+                                    , MatrixScale(TERRAIN_SCALE, TERRAIN_SCALE, TERRAIN_SCALE)
+                                   );
+  terrain_model.transform = transform;
+ 
   /* Se definen los shaders del terreno */
  terrain_model.materials[0].shader = shader;
  terrain_model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = GenerateTerrainTexture(heightmap);
@@ -134,6 +140,20 @@ Model GenerateTerrain(Image heightmap) {
  // UnloadImage(heightmap);
  
  return terrain_model;
+}
+
+Model GenerateCollisionModel(Image heightmap, Matrix transform)
+{
+  Image lowResHeightmap = ImageCopy(heightmap);
+  ImageResize(&lowResHeightmap, heightmap.width / 2, heightmap.height / 2);
+  Mesh collisionMesh = GenMeshHeightmap(lowResHeightmap,  (Vector3){ TERRAIN_SIZE, MAX_TERRAIN_HEIGHT, TERRAIN_SIZE });
+  Model collisionModel = LoadModelFromMesh(collisionMesh);
+  collisionModel.transform = transform; // match main terrain
+
+  return collisionModel;
+
+// Use this for GetRayCollisionMesh only!
+
 }
 
 void SetupTerrainShaderPassiveParameters(Shader* terrain_shader)
