@@ -5,11 +5,11 @@ Player::Player(const Vector3& startPos)
   : position(startPos),
     size({1.5f, 2.5f, 1.5f}),
     velocity({0.0f, 0.0f, 0.0f}),       
-    moveSpeed(2.5f),
+    moveSpeed(0.5f),
     cameraRadius(20.0f),
     gravity(0.05f),
     isOnGround(false),
-    stepHeight(100.0f)
+    stepHeight(1.0f)
 {}
 
 void Player::Update(Camera& camera, const Model& model)
@@ -83,7 +83,7 @@ void Player::Update(Camera& camera, const Model& model)
   else
     velocity.y = 0;
 
-  velocity.y = Clamp(velocity.y, -2.0f, 10.0f);
+  velocity.y = Clamp(velocity.y, -1.0f, 10.0f);
   position.y += velocity.y;
 
   // === Ground Detection ===
@@ -106,7 +106,7 @@ void Player::Update(Camera& camera, const Model& model)
   
   if (floorHit.hit && floorHit.distance <= (size.y / 2 + 0.2f + stepHeight))
     {
-      groundY = floorHit.point.y + size.y / 2;
+      groundY = floorHit.point.y + size.y / 2 + 0.2f;
       isOverMesh = true;
     }
   
@@ -127,6 +127,7 @@ void Player::Update(Camera& camera, const Model& model)
     position.y + camY + 2.0f,
     position.z + camZ
   };
+  
   camera.target = position;
 }
 

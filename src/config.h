@@ -7,7 +7,7 @@
 
 #define RANDOM_TERRAIN true
 
-#define CHUNK_RADIUS 1
+#define CHUNK_RADIUS 2
 #define CHUNK_DIAMETER CHUNK_RADIUS * 2 + 1
 #define TREE_COUNT 50
 

@@ -7,10 +7,9 @@
 #include "player.h"
 #include <iostream>
 
-
 int main(void) {
     InitWindow(1200, 800, "Terreno Procedural");
-    SetTargetFPS(144);
+    SetTargetFPS(60);
     DisableCursor();
 
     Model water_model = GenWaterModel();
@@ -19,10 +18,6 @@ int main(void) {
     Shader shader = LoadShader("resources/shaders/lighting.vs", "resources/shaders/lighting.fs");
 
     Model tree_model = SetupTreeModel();
-
-    // Vector3 treePositions[TREE_COUNT];
-    // int actualTreeCount = GenerateForest(treePositions, heightmap);
-    // std::cout << "Árboles colocados: " << actualTreeCount << std::endl;
 
     // Crear jugador
     Player player((Vector3){ 0.0f, WORLD_SIZE / 4, 0.0f });
@@ -34,8 +29,6 @@ int main(void) {
     camera.projection = CAMERA_PERSPECTIVE;
 
     std::map<std::pair<int, int>, Chunk> chunks;
-    
-    // Chunk chunks[7][7];
 
     for(int i = -3; i <= 3; ++i) {
       for(int j = -3; j <= 3; ++j) {
@@ -64,17 +57,16 @@ int main(void) {
           -0.5f
         };
 
-        // SetupTerrainShaderLight(&terrain_model.materials[0].shader, lightDir);
         SetupTreeShaderLight(&tree_model.materials[1].shader, lightDir);
         
         int playerChunkX = AbsolutePos2Grid(camera.target.x);
         int playerChunkZ = AbsolutePos2Grid(camera.target.z);
 
-        // Track visible area
+        // Rastrear area visible
         std::unordered_set<std::pair<int, int>, pair_hash> currentVisibleChunks;
         auto visiblePositions = GetChunksAroundPlayer(playerChunkX, playerChunkZ);
 
-        // Generate new chunks and track visible
+        // Generar nuevos chunks y rastrear los visibles
         for (auto& pos : visiblePositions) {
           currentVisibleChunks.insert(pos);
 
@@ -85,7 +77,7 @@ int main(void) {
           }
         }
 
-        // Unload chunks outside of radius
+        // Descargar los chunks lejanos
         for (auto it = chunks.begin(); it != chunks.end(); ) {
           if (currentVisibleChunks.find(it->first) == currentVisibleChunks.end()) {
             it->second.UnloadChunk();
@@ -105,7 +97,6 @@ int main(void) {
 
         player.Draw();
         
-        // SetupTerrainShaderActiveParameters(&terrain_model.materials[0].shader);
         SetupWaterShaderLight(&water_model.materials[0].shader, lightDir);
         
         for(auto& entry : chunks) {
@@ -125,11 +116,7 @@ int main(void) {
           DrawModel(water_model, water_pos, TERRAIN_SCALE, WHITE);
         }
         EndBlendMode();
-
         
-        // Dibujar árboles
-        // DrawForest(treePositions, actualTreeCount, tree_model);
-
         EndMode3D();
 
         DrawFPS(10, 10);
@@ -144,7 +131,7 @@ int main(void) {
     // Limpieza
     UnloadWaterResources(&water_model);
     // UnloadTerrainResources(&terrain_model);
-    // UnloadTreeResources(&tree_model);
+    UnloadTreeResources(&tree_model);
     // UnloadImage(heightmap);
     UnloadShader(shader);
     CloseWindow();

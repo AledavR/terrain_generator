@@ -80,9 +80,3 @@ void UnloadTreeResources(Model *tree_model) {
     UnloadModel(*tree_model);
 }
 
-void DrawForest(Vector3 *positions, int count, Model tree_model) {
-    for (int i = 0; i < count; i++) {
-        DrawModel(tree_model, positions[i], 4.0f, WHITE);
-    }
-}
-

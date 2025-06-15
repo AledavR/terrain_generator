@@ -18,9 +18,6 @@ void SetupTreeShaderTime(Shader* tree_shader, float time);
 void UnloadTreeResources(Model *tree_model);
 int GenerateChunkVegetation(Vector3* positions, Chunk& chunk);
 
-// Dibuja árboles en pantalla
-void DrawForest(Vector3 *positions, int count, Model tree_model);
-
 
 
 #endif
