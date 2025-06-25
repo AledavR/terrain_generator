@@ -19,5 +19,4 @@ void UnloadTreeResources(Model *tree_model);
 int GenerateChunkVegetation(Vector3* positions, Chunk& chunk);
 
 
-
 #endif

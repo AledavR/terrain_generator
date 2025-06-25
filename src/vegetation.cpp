@@ -22,19 +22,18 @@ int GenerateChunkVegetation(Vector3* positions, Chunk& chunk)
     std::mt19937 rng(chunk.seed);
     std::uniform_int_distribution<int> dist_x(0, TERRAIN_SIZE);
     std::uniform_int_distribution<int> dist_z(0, TERRAIN_SIZE);
-    std::uniform_real_distribution<float> offset(0.0f, 1.0f);
 
     int attempts = 0;
     const int max_attempts = TREE_COUNT * 10;
 
     while (trees_placed < TREE_COUNT && attempts++ < max_attempts) {
+        
         int x = dist_x(rng);
         int z = dist_z(rng);
 
         float height = GetHeightAtPoint(chunk.chunk_heightmap, x, z);
         if (height < 0.11f || height > 0.3f) continue;
 
-        if (offset(rng) < 0.8f) continue;
 
         positions[trees_placed++] = (Vector3){
             origin.x + x * TERRAIN_SCALE,

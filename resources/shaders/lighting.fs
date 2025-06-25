@@ -3,11 +3,9 @@
 in vec3 fragNormal;
 in vec2 fragTexCoord;
 
-uniform vec3 lightDirection;
+uniform vec3 lightDirection, moonDirection, moonColor;
 uniform vec4 colDiffuse;
 uniform sampler2D texture0;
-uniform vec3 moonDirection;
-uniform vec3 moonColor;
 
 out vec4 finalColor;
 

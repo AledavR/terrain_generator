@@ -18,11 +18,11 @@ class Chunk {
   int tree_count;
 
   Chunk(){}
-  Chunk(int position_x, int position_z) {
+  Chunk(int position_x, int position_z, int global_seed) {
     grid_position[0] = position_x;
     grid_position[1] = position_z;
     seed = GenerateChunkSeed(position_x, position_z);
-    chunk_heightmap = GenerateBlendedHeightmap(position_x, position_z, 1123);
+    chunk_heightmap = GenerateBlendedHeightmap(position_x, position_z, global_seed);
   }
   void LoadChunk(Shader* terrain_shader);
   void UnloadChunk(void);

@@ -12,6 +12,8 @@ int main(void) {
     SetTargetFPS(60);
     DisableCursor();
 
+    bool helpMenuVisible = false;
+
     Model water_model = GenWaterModel();
     SetupWaterShaderPassiveParameters(&water_model.materials[0].shader);
     
@@ -28,11 +30,17 @@ int main(void) {
     camera.fovy = 90.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
+    int seed = 11326;
+
+    if (RANDOM_TERRAIN){
+      seed = GetRandomValue(-1000, 1000);
+    }
+
     std::map<std::pair<int, int>, Chunk> chunks;
 
     for(int i = -3; i <= 3; ++i) {
       for(int j = -3; j <= 3; ++j) {
-        chunks.emplace(std::make_pair(i, j), Chunk(i,j));
+        chunks.emplace(std::make_pair(i, j), Chunk(i,j, seed));
       }
     }
 
@@ -42,15 +50,21 @@ int main(void) {
 
     // Bucle principal
     while (!WindowShouldClose()) {
+      
+       if (IsKeyPressed(KEY_H)) helpMenuVisible = !helpMenuVisible;
 
-        time += GetFrameTime();
+       time += GetFrameTime();
 
+        
+        
         // Actualizar shaders
         SetupTreeShaderTime(&tree_model.materials[1].shader, time);
         SetupWaterShaderTime(&water_model.materials[0].shader, time);
 
         // Luz rotatoria
-        float angle = time * 0.2f;
+        float angle = time * 0.05f;
+        float period = (sinf(angle) + 1.0f) * 0.5f;
+        float smooth_step = period * period * (2 * period - 3);
         Vector3 lightDir = {
           cosf(angle),
           -sinf(angle),
@@ -71,7 +85,7 @@ int main(void) {
           currentVisibleChunks.insert(pos);
 
           if (chunks.find(pos) == chunks.end()) {
-            Chunk newChunk(pos.first, pos.second);
+            Chunk newChunk(pos.first, pos.second, seed);
             newChunk.LoadChunk(&shader);
             chunks.emplace(pos, std::move(newChunk));
           }
@@ -92,7 +106,7 @@ int main(void) {
 
         // Renderizado
         BeginDrawing();
-        ClearBackground(SKYBLUE);
+        ClearBackground(ColorLerp(DARKBLUE, SKYBLUE, period));
         BeginMode3D(camera);
 
         player.Draw();
@@ -124,15 +138,17 @@ int main(void) {
                             camera.target.x, camera.target.y, camera.target.z), 10, 30, 20, BLUE);
         DrawText(TextFormat("Grid position: (%03i, %03i)",
                             AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 50, 20, BLUE);
+        DrawText(TextFormat("Presionar H para controles",
+                            AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 70, 20, BLACK);
+
+        if (helpMenuVisible) {DrawHelpMenu();}
 
         EndDrawing();
     }
 
     // Limpieza
     UnloadWaterResources(&water_model);
-    // UnloadTerrainResources(&terrain_model);
     UnloadTreeResources(&tree_model);
-    // UnloadImage(heightmap);
     UnloadShader(shader);
     CloseWindow();
 

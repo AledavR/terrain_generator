@@ -6,22 +6,12 @@ in vec2 vertexTexCoord;
 
 // Outputs to fragment shader
 out vec2 TexCoord;
-out vec3 FragPos;
-out vec3 WorldPos;
+out vec3 FragPos, WorldPos;
 
 // Uniforms from Raylib
-uniform float time;
-uniform float freqX;
-uniform float freqY;
-uniform float ampX;
-uniform float ampY;
-uniform float speedX;
-uniform float speedY;
+uniform float time, freqX, freqY, ampX, ampY, speedX, speedY, uvScale = 1.0;
 
-uniform mat4 matModel;
-uniform mat4 matView;
-uniform mat4 matProjection;
-uniform float uvScale = 1.0;
+uniform mat4 matModel, matView, matProjection;
 
 void main()
 {

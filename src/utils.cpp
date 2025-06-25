@@ -80,3 +80,39 @@ std::vector<std::pair<int, int>> GetChunksAroundPlayer(int centerX, int centerZ)
     }
     return result;
 }
+
+
+
+void DrawHelpMenu()
+{
+    Color transparentGreen = (Color){0, 255, 0, 150};
+    Color borderColor = DARKGREEN;
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int menuX = 50;
+    int menuY = 50;
+    int menuWidth = screenWidth - 100;
+    int menuHeight = screenHeight - 100;
+
+    int borderThickness = 4;
+
+    DrawRectangle(menuX - borderThickness, menuY - borderThickness,
+                  menuWidth + 2 * borderThickness, menuHeight + 2 * borderThickness, borderColor);
+
+    DrawRectangle(menuX, menuY, menuWidth, menuHeight, transparentGreen);
+
+    int textX = menuX + 20;
+    int textY = menuY + 30;
+    int lineHeight = 25;
+
+    DrawText("Controles", textX, textY, 30, DARKGREEN);
+    textY += 50;
+
+    DrawText("- W / A / S / D: Mover usuario", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- Mouse: Mover camara", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- Mouse wheel: Acercar o alejar camara", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- Space: Saltar", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- H: Activar/Desactivar menu de ayuda", textX, textY, 20, BLACK); textY += lineHeight;
+}

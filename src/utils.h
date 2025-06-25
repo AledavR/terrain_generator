@@ -16,6 +16,7 @@ int GenerateChunkSeed(int x, int z);
 Image GenerateBlendedHeightmap(int position_x, int position_z, int seed);
 float GetHeightAtPoint(Image heightmap, int x, int z);
 int AbsolutePos2Grid(float l);
+void DrawHelpMenu();
 std::vector<std::pair<int, int>> GetChunksAroundPlayer(int centerX, int centerZ);
 
 #endif // UTILS_H

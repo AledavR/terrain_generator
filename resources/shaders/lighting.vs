@@ -1,11 +1,9 @@
 #version 330
 
-in vec3 vertexPosition;
-in vec3 vertexNormal;
+in vec3 vertexPosition, vertexNormal;
 in vec2 vertexTexCoord;
 
-uniform mat4 mvp;
-uniform mat4 matModel;
+uniform mat4 mvp, matModel;
 
 out vec3 fragNormal;
 out vec2 fragTexCoord;

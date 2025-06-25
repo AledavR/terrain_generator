@@ -1,21 +1,13 @@
 #version 330
 
-in vec3 vertexPosition;
-in vec3 vertexNormal;
+in vec3 vertexPosition, vertexNormal;
 in vec2 vertexTexCoord;
 
 out vec3 fragNormal;
 out vec2 fragTexCoord;
 
-uniform float time;
-uniform float freqX;
-uniform float freqZ;
-uniform float speedX;
-uniform float speedZ;
-
-uniform mat4 mvp;
-uniform mat4 matModel;
-uniform mat4 matProjection;
+uniform float time, freqX, freqZ, speedX, speedZ;
+uniform mat4 mvp, matModel, matProjection;
 
 void main() {
   vec3 pos = vertexPosition;
