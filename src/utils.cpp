@@ -112,7 +112,8 @@ void DrawHelpMenu()
 
     DrawText("- W / A / S / D: Mover usuario", textX, textY, 20, BLACK); textY += lineHeight;
     DrawText("- Mouse: Mover camara", textX, textY, 20, BLACK); textY += lineHeight;
-    DrawText("- Mouse wheel: Acercar o alejar camara", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- Rueda del Mouse: Acercar o alejar camara", textX, textY, 20, BLACK); textY += lineHeight;
     DrawText("- Space: Saltar", textX, textY, 20, BLACK); textY += lineHeight;
+    DrawText("- Escape: Cerrar el programa", textX, textY, 20, BLACK); textY += lineHeight;
     DrawText("- H: Activar/Desactivar menu de ayuda", textX, textY, 20, BLACK); textY += lineHeight;
 }

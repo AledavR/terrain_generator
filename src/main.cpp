@@ -133,13 +133,13 @@ int main(void) {
         
         EndMode3D();
 
-        DrawFPS(10, 10);
+        DrawText(TextFormat("%i FPS", GetFPS()), 10, 10, 20, WHITE);
         DrawText(TextFormat("Player position: (%06.3f, %06.3f, %06.3f)",
-                            camera.target.x, camera.target.y, camera.target.z), 10, 30, 20, BLUE);
+                            camera.target.x, camera.target.y, camera.target.z), 10, 30, 20, WHITE);
         DrawText(TextFormat("Grid position: (%03i, %03i)",
-                            AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 50, 20, BLUE);
+                            AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 50, 20, WHITE);
         DrawText(TextFormat("Presionar H para controles",
-                            AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 70, 20, BLACK);
+                            AbsolutePos2Grid(camera.target.x), AbsolutePos2Grid(camera.target.z)), 10, 70, 20, WHITE);
 
         if (helpMenuVisible) {DrawHelpMenu();}
 
